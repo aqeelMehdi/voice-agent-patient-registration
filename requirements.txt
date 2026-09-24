@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+email-validator
+phonenumbers
+python-dotenv
+httpx
+pytest
+pymysql
+cryptography
