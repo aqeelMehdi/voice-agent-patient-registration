@@ -4,7 +4,7 @@ A deployed voice-based patient registration system that allows a caller to regis
 
 This project was built for the **Voice AI / Conversational AI Engineer take-home technical assessment**.
 
-> **Demo / assessment use only. Do not enter real patient or protected health information.**
+> **Demo / assessment use only. Do not enter real patient or protected health information. Also Use the URL Of Admin Dashboard for seeing the Admin Panel or the UI**
 
 ---
 
@@ -13,11 +13,11 @@ This project was built for the **Voice AI / Conversational AI Engineer take-home
 | Resource | Value |
 |---|---|
 | **Phone Number** | **+1 (930) 239-9063** |
-| **API Base URL** | `` |
-| **Swagger / API Docs** | `https://YOUR-RAILWAY-DOMAIN/docs` |
-| **Admin Dashboard** | `https://YOUR-RAILWAY-DOMAIN/dashboard` |
-| **Health Check** | `https://YOUR-RAILWAY-DOMAIN/health` |
-| **Repository** | `https://github.com/YOUR_USERNAME/voice-agent-patient-registration` |
+| **API Base URL** | `https://voice-agent-patient-registration-production.up.railway.app` |
+| **Swagger / API Docs** | `https://voice-agent-patient-registration-production.up.railway.app/docs` |
+| **Admin Dashboard** | `https://voice-agent-patient-registration-production.up.railway.app/dashboard` |
+| **Health Check** | `https://voice-agent-patient-registration-production.up.railway.app/health` |
+| **Repository** | `https://github.com/aqeelMehdi/voice-agent-patient-registration` |
 
 ### Reviewer Quick Test
 
@@ -227,8 +227,6 @@ voice-agent-patient-registration/
 └── README.md
 ```
 
-> If `docs/vapi_system_prompt.md` does not yet exist, create it before submission and paste the exact Vapi system prompt used by the deployed assistant into that file.
-
 ---
 
 ## Database Model
@@ -368,21 +366,6 @@ Content-Type: application/json
 }
 ```
 
-### Partial Update
-
-```http
-PUT /patients/{patient_id}
-Content-Type: application/json
-```
-
-```json
-{
-  "address_line_1": "200 Updated Avenue",
-  "city": "New York",
-  "state": "NY",
-  "zip_code": "10021"
-}
-```
 
 ---
 
@@ -453,11 +436,6 @@ The assistant prompt explicitly defines:
 - success/failure behavior;
 - prevention of technical error details being spoken to callers.
 
-The exact deployed prompt should be stored in:
-
-```text
-docs/vapi_system_prompt.md
-```
 
 This keeps prompt engineering versioned and reviewable alongside the application code.
 
@@ -843,26 +821,6 @@ Before review, verify that:
 - create, duplicate lookup, and update flows work end-to-end;
 - only synthetic patient data exists in the database.
 
-### Submission Information
-
-Send the reviewer:
-
-```text
-Repository URL:
-https://github.com/YOUR_USERNAME/voice-agent-patient-registration
-
-Phone Number:
-+1 (930) 239-9063
-
-API Base URL:
-https://YOUR-RAILWAY-DOMAIN
-
-Testing Notes:
-No credentials required for the current demo.
-Please use synthetic patient data only.
-Swagger: https://YOUR-RAILWAY-DOMAIN/docs
-Dashboard: https://YOUR-RAILWAY-DOMAIN/dashboard
-```
 
 ---
 
