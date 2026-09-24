@@ -2,7 +2,8 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
-
+from fastapi.staticfiles import StaticFiles
+from .routes.dashboard import router as dashboard_router
 from .database import Base, engine
 from . import models
 from .exceptions import AppException
@@ -18,7 +19,13 @@ app = FastAPI(
     version="1.0.0",
 )
 
+app.include_router(dashboard_router)
 
+app.mount(
+    "/static",
+    StaticFiles(directory="app/static"),
+    name="static",
+)
 # ----------------------------
 # Exception handlers
 # ----------------------------

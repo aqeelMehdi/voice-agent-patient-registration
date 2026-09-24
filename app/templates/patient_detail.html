@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Patient Details
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/static/dashboard.css"
+    >
+
+</head>
+
+
+<body class="detail-page">
+
+
+<div class="detail-container">
+
+    <a
+        href="/dashboard"
+        class="back-link"
+    >
+        ← Back to Dashboard
+    </a>
+
+
+    {% if patient %}
+
+    <div class="detail-header">
+
+        <div class="large-avatar">
+
+            {{ patient.first_name[0] }}
+            {{ patient.last_name[0] }}
+
+        </div>
+
+
+        <div>
+
+            <p class="eyebrow">
+                PATIENT RECORD
+            </p>
+
+            <h1>
+
+                {{ patient.first_name }}
+                {{ patient.last_name }}
+
+            </h1>
+
+            <p class="patient-id">
+
+                ID:
+                {{ patient.patient_id }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="detail-grid">
+
+
+        <!-- PERSONAL INFORMATION -->
+
+        <section class="detail-card">
+
+            <h2>
+                Personal Information
+            </h2>
+
+
+            <div class="info-grid">
+
+                <div class="info-item">
+
+                    <span>
+                        Date of Birth
+                    </span>
+
+                    <strong>
+                        {{ patient.date_of_birth.strftime("%m/%d/%Y") }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span>
+                        Sex
+                    </span>
+
+                    <strong>
+                        {{ patient.sex }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span>
+                        Phone
+                    </span>
+
+                    <strong>
+                        {{ patient.phone_number }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span>
+                        Email
+                    </span>
+
+                    <strong>
+                        {{ patient.email or "Not provided" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ADDRESS -->
+
+        <section class="detail-card">
+
+            <h2>
+                Address
+            </h2>
+
+
+            <div class="address-block">
+
+                <strong>
+                    {{ patient.address_line_1 }}
+                </strong>
+
+                {% if patient.address_line_2 %}
+
+                <span>
+                    {{ patient.address_line_2 }}
+                </span>
+
+                {% endif %}
+
+                <span>
+
+                    {{ patient.city }},
+                    {{ patient.state }}
+                    {{ patient.zip_code }}
+
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- INSURANCE -->
+
+        <section class="detail-card">
+
+            <h2>
+                Insurance
+            </h2>
+
+
+            <div class="info-grid">
+
+                <div class="info-item">
+
+                    <span>
+                        Provider
+                    </span>
+
+                    <strong>
+
+                        {{ patient.insurance_provider or "Not provided" }}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span>
+                        Member ID
+                    </span>
+
+                    <strong>
+
+                        {{ patient.insurance_member_id or "Not provided" }}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ADDITIONAL INFO -->
+
+        <section class="detail-card">
+
+            <h2>
+                Additional Information
+            </h2>
+
+
+            <div class="info-grid">
+
+                <div class="info-item">
+
+                    <span>
+                        Preferred Language
+                    </span>
+
+                    <strong>
+
+                        {{ patient.preferred_language or "English" }}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span>
+                        Emergency Contact
+                    </span>
+
+                    <strong>
+
+                        {{ patient.emergency_contact_name or "Not provided" }}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span>
+                        Emergency Phone
+                    </span>
+
+                    <strong>
+
+                        {{ patient.emergency_contact_phone or "Not provided" }}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SYSTEM INFORMATION -->
+
+        <section class="detail-card full">
+
+            <h2>
+                Record Information
+            </h2>
+
+
+            <div class="info-grid">
+
+                <div class="info-item">
+
+                    <span>
+                        Created
+                    </span>
+
+                    <strong>
+                        {{ patient.created_at.strftime("%b %d, %Y %I:%M %p") }}
+                    </strong>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span>
+                        Last Updated
+                    </span>
+
+                    <strong>
+                        {{ patient.updated_at.strftime("%b %d, %Y %I:%M %p") }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    {% else %}
+
+
+    <div class="not-found">
+
+        <h1>
+            Patient Not Found
+        </h1>
+
+        <p>
+            This patient record does not exist
+            or has been deleted.
+        </p>
+
+        <a
+            href="/dashboard"
+            class="primary-button"
+        >
+            Return to Dashboard
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+</div>
+
+
+</body>
+
+</html>

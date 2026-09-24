@@ -9,3 +9,4 @@ httpx
 pytest
 pymysql
 cryptography
+jinja2

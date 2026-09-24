@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Patient Registration Dashboard
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/static/dashboard.css"
+    >
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
+</head>
+
+
+<body>
+
+<div class="app-shell">
+
+    <!-- ================================================= -->
+    <!-- SIDEBAR -->
+    <!-- ================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                +
+            </div>
+
+            <div>
+                <h2>CareFlow</h2>
+                <span>Patient Registration</span>
+            </div>
+
+        </div>
+
+
+        <nav class="nav">
+
+            <a
+                href="/dashboard"
+                class="nav-item active"
+            >
+                Dashboard
+            </a>
+
+            <a
+                href="#patients"
+                class="nav-item"
+            >
+                Patients
+            </a>
+
+            <a
+                href="/docs"
+                target="_blank"
+                class="nav-item"
+            >
+                API Documentation
+            </a>
+
+            <a
+                href="/health"
+                target="_blank"
+                class="nav-item"
+            >
+                System Health
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="status-dot"></div>
+
+            <div>
+                <strong>
+                    System Online
+                </strong>
+
+                <span>
+                    Voice registration active
+                </span>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================================================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ================================================= -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="eyebrow">
+                    ADMIN CONSOLE
+                </p>
+
+                <h1>
+                    Patient Registration Dashboard
+                </h1>
+
+                <p class="subtitle">
+                    Monitor and review patient registrations
+                    captured by the voice AI system.
+                </p>
+
+            </div>
+
+
+            <div class="live-badge">
+
+                <span class="live-dot"></span>
+
+                Live
+
+            </div>
+
+        </header>
+
+
+        <!-- ================================================= -->
+        <!-- KPI CARDS -->
+        <!-- ================================================= -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-label">
+                        Active Patients
+                    </span>
+
+                    <span class="stat-icon">
+                        👥
+                    </span>
+
+                </div>
+
+                <div class="stat-value">
+                    {{ total_patients }}
+                </div>
+
+                <div class="stat-description">
+                    Total active patient records
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-label">
+                        Registered Today
+                    </span>
+
+                    <span class="stat-icon">
+                        +
+                    </span>
+
+                </div>
+
+                <div class="stat-value">
+                    {{ registrations_today }}
+                </div>
+
+                <div class="stat-description">
+                    New registrations today
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-label">
+                        Last 7 Days
+                    </span>
+
+                    <span class="stat-icon">
+                        ↗
+                    </span>
+
+                </div>
+
+                <div class="stat-value">
+                    {{ registrations_week }}
+                </div>
+
+                <div class="stat-description">
+                    Registrations this week
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-label">
+                        Recently Updated
+                    </span>
+
+                    <span class="stat-icon">
+                        ↻
+                    </span>
+
+                </div>
+
+                <div class="stat-value">
+                    {{ recently_updated }}
+                </div>
+
+                <div class="stat-description">
+                    Updated during last 24 hours
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- CHARTS -->
+        <!-- ================================================= -->
+
+        <section class="chart-grid">
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>
+                            Patients by State
+                        </h2>
+
+                        <p>
+                            Geographic distribution of active patients
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="stateChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>
+                            Patient Demographics
+                        </h2>
+
+                        <p>
+                            Distribution by recorded sex
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="chart-container doughnut">
+                    <canvas id="sexChart"></canvas>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- RECENT PATIENTS -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+                        Recent Registrations
+                    </h2>
+
+                    <p>
+                        Most recently created patient records
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="recent-grid">
+
+                {% for patient in recent_patients %}
+
+                <a
+                    class="recent-card"
+                    href="/dashboard/patients/{{ patient.patient_id }}"
+                >
+
+                    <div class="avatar">
+
+                        {{ patient.first_name[0] }}
+                        {{ patient.last_name[0] }}
+
+                    </div>
+
+
+                    <div class="recent-content">
+
+                        <strong>
+                            {{ patient.first_name }}
+                            {{ patient.last_name }}
+                        </strong>
+
+                        <span>
+                            {{ patient.phone_number }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="recent-state">
+
+                        {{ patient.state }}
+
+                    </div>
+
+                </a>
+
+                {% else %}
+
+                <div class="empty-state">
+                    No patients have been registered yet.
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- PATIENT DIRECTORY -->
+        <!-- ================================================= -->
+
+        <section
+            class="panel"
+            id="patients"
+        >
+
+            <div class="panel-header patient-header">
+
+                <div>
+
+                    <h2>
+                        Patient Directory
+                    </h2>
+
+                    <p>
+                        Search and review active patient records
+                    </p>
+
+                </div>
+
+
+                <div class="patient-count">
+
+                    {{ patients | length }}
+
+                    {% if patients | length == 1 %}
+                        result
+                    {% else %}
+                        results
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- FILTERS -->
+
+            <form
+                class="filters"
+                method="GET"
+                action="/dashboard"
+            >
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search }}"
+                        placeholder="Search by name, phone or email..."
+                    >
+
+                </div>
+
+
+                <select name="state">
+
+                    <option value="">
+                        All states
+                    </option>
+
+                    {% for item in states %}
+
+                    <option
+                        value="{{ item }}"
+                        {% if selected_state == item %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ item }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <select name="sex">
+
+                    <option value="">
+                        All
+                    </option>
+
+                    <option
+                        value="Male"
+                        {% if selected_sex == "Male" %}
+                            selected
+                        {% endif %}
+                    >
+                        Male
+                    </option>
+
+                    <option
+                        value="Female"
+                        {% if selected_sex == "Female" %}
+                            selected
+                        {% endif %}
+                    >
+                        Female
+                    </option>
+
+                    <option
+                        value="Other"
+                        {% if selected_sex == "Other" %}
+                            selected
+                        {% endif %}
+                    >
+                        Other
+                    </option>
+
+                    <option
+                        value="Decline to Answer"
+                        {% if selected_sex == "Decline to Answer" %}
+                            selected
+                        {% endif %}
+                    >
+                        Decline to Answer
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Search
+                </button>
+
+
+                <a
+                    href="/dashboard"
+                    class="secondary-button"
+                >
+                    Clear
+                </a>
+
+            </form>
+
+
+            <!-- TABLE -->
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Date of Birth
+                        </th>
+
+                        <th>
+                            Phone
+                        </th>
+
+                        <th>
+                            Location
+                        </th>
+
+                        <th>
+                            Created
+                        </th>
+
+                        <th>
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for patient in patients %}
+
+                    <tr>
+
+                        <td>
+
+                            <div class="patient-cell">
+
+                                <div class="avatar small">
+
+                                    {{ patient.first_name[0] }}
+                                    {{ patient.last_name[0] }}
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        {{ patient.first_name }}
+                                        {{ patient.last_name }}
+                                    </strong>
+
+                                    <span>
+                                        {{ patient.email or "No email provided" }}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            {{ patient.date_of_birth.strftime("%m/%d/%Y") }}
+                        </td>
+
+
+                        <td>
+                            {{ patient.phone_number }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="state-badge">
+                                {{ patient.state }}
+                            </span>
+
+                            {{ patient.city }}
+
+                        </td>
+
+
+                        <td>
+
+                            {{ patient.created_at.strftime("%b %d, %Y") }}
+
+                        </td>
+
+
+                        <td>
+
+                            <a
+                                class="view-button"
+                                href="/dashboard/patients/{{ patient.patient_id }}"
+                            >
+                                View
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="empty-table"
+                        >
+
+                            No patients match your search.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+
+            Voice AI Patient Registration System
+
+            <span>•</span>
+
+            FastAPI + MySQL + Vapi
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script>
+
+const stateLabels = {{ state_labels | tojson }};
+const stateValues = {{ state_values | tojson }};
+
+const sexLabels = {{ sex_labels | tojson }};
+const sexValues = {{ sex_values | tojson }};
+
+
+new Chart(
+    document.getElementById("stateChart"),
+    {
+        type: "bar",
+
+        data: {
+            labels: stateLabels,
+
+            datasets: [{
+                label: "Patients",
+
+                data: stateValues,
+
+                backgroundColor:
+                    "rgba(59, 130, 246, 0.75)",
+
+                borderColor:
+                    "rgba(59, 130, 246, 1)",
+
+                borderWidth: 1,
+
+                borderRadius: 8,
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+
+            scales: {
+
+                y: {
+                    beginAtZero: true,
+
+                    ticks: {
+                        precision: 0
+                    },
+
+                    grid: {
+                        color:
+                            "rgba(148, 163, 184, 0.10)"
+                    }
+                },
+
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+
+            }
+        }
+    }
+);
+
+
+new Chart(
+    document.getElementById("sexChart"),
+    {
+        type: "doughnut",
+
+        data: {
+
+            labels: sexLabels,
+
+            datasets: [{
+                data: sexValues,
+
+                backgroundColor: [
+                    "#3b82f6",
+                    "#ec4899",
+                    "#8b5cf6",
+                    "#94a3b8"
+                ],
+
+                borderWidth: 0,
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            cutout: "70%",
+
+            plugins: {
+
+                legend: {
+                    position: "bottom"
+                }
+
+            }
+
+        }
+    }
+);
+
+</script>
+
+</body>
+
+</html>
