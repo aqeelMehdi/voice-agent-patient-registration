@@ -13,7 +13,7 @@ This project was built for the **Voice AI / Conversational AI Engineer take-home
 | Resource | Value |
 |---|---|
 | **Phone Number** | **+1 (930) 239-9063** |
-| **API Base URL** | `https://YOUR-RAILWAY-DOMAIN` |
+| **API Base URL** | `` |
 | **Swagger / API Docs** | `https://YOUR-RAILWAY-DOMAIN/docs` |
 | **Admin Dashboard** | `https://YOUR-RAILWAY-DOMAIN/dashboard` |
 | **Health Check** | `https://YOUR-RAILWAY-DOMAIN/health` |
